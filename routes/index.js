@@ -4,6 +4,7 @@ const { Login, loginUser } = require("./LoginRoute");
 const { Register, registerUser } = require("./RegisterRoute");
 const { Profile } = require("./ProfileRoute");
 const { LogoutUser } = require("./LogoutRoute");
+const { Google, GoogleUser } = require("./GoogleRoutes");
 
 // Home Routes
 router.get("/", (req, res) => {
@@ -25,5 +26,10 @@ router.get("/profile", Profile);
 
 // Logout Route
 router.get("/logout", LogoutUser);
+
+// Google OAuth
+router.get("/google", Google)
+
+router.get("/google/redirect", GoogleUser)
 
 module.exports = router;

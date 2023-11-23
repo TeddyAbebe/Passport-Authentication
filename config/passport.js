@@ -10,22 +10,28 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:3000/google/redirect",
     },
-    function (accessToken, refreshToken, profile, cb) {
+    async (accessToken, refreshToken, profile, cb) => {
       console.log(accessToken, profile);
-      User.findOrCreate({ googleId: profile.id }, (err, user) => {
-        if (!err) return cb(err, user);
-        if (!user) {
-          let newUser = new User({
-            googleId: profile.id,
+
+      try {
+        const email = profile.emails ? profile.emails[0].value : null;
+        const existingUser = await User.findOne({ googleId: profile.id });
+
+        if (existingUser) {
+          return cb(null, existingUser);
+        } else {
+          const newUser = new User({
             name: profile.displayName,
+            email: email,
+            googleId: profile.id,
           });
 
-          newUser.save();
+          await newUser.save();
           return cb(null, newUser);
-        } else {
-          return cb(null, user);
         }
-      });
+      } catch (err) {
+        return cb(err);
+      }
     }
   )
 );

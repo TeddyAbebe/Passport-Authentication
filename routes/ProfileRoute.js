@@ -1,6 +1,6 @@
 const Profile = (req, res) => {
   if (req.isAuthenticated()) {
-    res.send("User Profile");
+    res.render("home", { user: req.user, body: "profile" });
   } else {
     req.flash("error", "You need to Login to access the Profile Page!");
     res.redirect("/login");
