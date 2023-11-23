@@ -1,27 +1,31 @@
 const passport = require("passport");
-const LocalStrategy = require("passport-local");
 const User = require("../models/User");
-const { compareSync } = require("bcrypt");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+require("dotenv").config();
 
 passport.use(
-  new LocalStrategy(
+  new GoogleStrategy(
     {
-      usernameField: "email",
-      passwordField: "password",
-      passReqToCallback: true,
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/google/redirect",
     },
-    async (req, email, password, done) => {
-      try {
-        const user = await User.findOne({ email: req.body.email });
+    function (accessToken, refreshToken, profile, cb) {
+      console.log(accessToken, profile);
+      User.findOrCreate({ googleId: profile.id }, (err, user) => {
+        if (!err) return cb(err, user);
+        if (!user) {
+          let newUser = new User({
+            googleId: profile.id,
+            name: profile.displayName,
+          });
 
-        if (!user || !compareSync(password, user.password)) {
-          return done(null, false, { message: "Incorrect Email or Password" });
+          newUser.save();
+          return cb(null, newUser);
+        } else {
+          return cb(null, user);
         }
-
-        return done(null, user);
-      } catch (err) {
-        return done(err);
-      }
+      });
     }
   )
 );

@@ -3,6 +3,7 @@ const passport = require("passport");
 const { Login, loginUser } = require("./LoginRoute");
 const { Register, registerUser } = require("./RegisterRoute");
 const { Profile } = require("./ProfileRoute");
+const { LogoutUser } = require("./LogoutRoute");
 
 // Home Routes
 router.get("/", (req, res) => {
@@ -23,13 +24,6 @@ router.post("/login", loginUser);
 router.get("/profile", Profile);
 
 // Logout Route
-router.get("/logout", (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      console.error(err);
-    }
-    res.redirect("/");
-  });
-});
+router.get("/logout", LogoutUser);
 
 module.exports = router;
