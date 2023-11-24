@@ -40,7 +40,6 @@ const loginUser = async (req, res) => {
 
     // Send the token to the client
     res.cookie("token", token, { httpOnly: true });
-    console.log("Token sent to client:", token);
 
     return res.redirect("/profile");
   } catch (error) {

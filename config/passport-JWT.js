@@ -1,7 +1,6 @@
 require("dotenv").config();
 const passport = require("passport");
 const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
 const User = require("../models/User");
 
 const cookieExtractor = (req) => {
@@ -9,7 +8,6 @@ const cookieExtractor = (req) => {
   if (req && req.cookies) {
     token = req.cookies["token"];
   }
-  console.log("Extracted Token:", token);
   return token;
 };
 
