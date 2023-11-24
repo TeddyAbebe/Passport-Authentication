@@ -4,27 +4,26 @@ const Routes = require("./routes");
 const connectDB = require("./config/db");
 const bodyParser = require("body-parser");
 const passport = require("passport");
-const flash = require("connect-flash");
-const { JwtStrategy, GoogleStrategy } = require("./config");
+// const { JwtStrategy, GoogleStrategy } = require("./config");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
 // set up view engine
 app.set("view engine", "ejs");
 
-app.use(flash());
-
-// Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
-
 // Connect to MongoDB
 connectDB;
 
-passport.use(JwtStrategy);
-passport.use(GoogleStrategy);
-
+// Middleware
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
+
+// passport.use(JwtStrategy);
+// passport.use(GoogleStrategy);
+
+require("./config/");
 
 // Routes
 app.use(Routes);

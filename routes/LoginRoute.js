@@ -1,37 +1,55 @@
+require("dotenv").config();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const { compare } = require("bcrypt");
 
 const Login = (req, res) => {
   res.render("home", { body: "login" });
 };
 
-const loginUser = (req, res) => {
-  passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (err || !user) {
-      return res.redirect("/login");
+const loginUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    // No user found
+    if (!user) {
+      return res.status(401).send({
+        success: false,
+        message: "Can't find a User.",
+      });
     }
 
-    req.login(user, { session: false }, (err) => {
-      if (err) {
-        console.error(err);
-        return res.redirect("/login");
-      }
+    // Incorrect Password
+    if (!(await compare(req.body.password, user.password))) {
+      return res.status(401).send({
+        success: false,
+        message: "Incorrect Password",
+      });
+    }
 
-      // Generate Token and set it in a Cookie
-      const generateJwtToken = (user) => {
-        const payload = {
-          sub: user._id,
-        };
+    const payload = {
+      name: user.name,
+      email: user.email,
+      id: user._id,
+    };
 
-        return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
-      };
-
-      const token = generateJwtToken(user);
-      res.cookie("token", token);
-
-      return res.redirect("/profile");
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1d",
     });
-  });
+
+    // Send the token to the client
+    res.cookie("token", token, { httpOnly: true });
+    console.log("Token sent to client:", token);
+
+    return res.redirect("/profile");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
 };
 
 module.exports = { Login, loginUser };

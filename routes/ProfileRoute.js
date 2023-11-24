@@ -1,5 +1,7 @@
+const passport = require("passport");
+
 const Profile = (req, res) => {
-  if (req.user) {
+  if (req.isAuthenticated()) {
     res.render("home", {
       user: req.user,
       body: "profile",

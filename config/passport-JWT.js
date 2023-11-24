@@ -1,36 +1,39 @@
+require("dotenv").config();
 const passport = require("passport");
-const User = require("../models/User");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-require("dotenv").config();
+const User = require("../models/User");
+
+const cookieExtractor = (req) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies["token"];
+  }
+  console.log("Extracted Token:", token);
+  return token;
+};
 
 const options = {
-  jwtFromRequest: ExtractJwt.fromExtractors([
-    ExtractJwt.fromAuthHeaderAsBearerToken(),
-    (req) => {
-      const token = req.cookies.token;
-      return token;
-    },
-  ]),
+  jwtFromRequest: cookieExtractor,
   secretOrKey: process.env.JWT_SECRET,
 };
 
 passport.use(
-  new JwtStrategy(options, async (payload, done) => {
+  new JwtStrategy(options, async (jwt_payload, done) => {
+    // console.log("JWT Payload:", jwt_payload);
     try {
-      console.log("Payload:", payload);
-      const user = await User.findById(payload.sub);
+      const user = await User.findById(jwt_payload.id).exec();
 
-      if (!user) {
-        console.log("User not found");
+      if (user) {
+        return done(null, user);
+      } else {
         return done(null, false);
       }
-      return done(null, user);
     } catch (err) {
-      console.error("Error in JwtStrategy:", err);
+      console.error(err);
       return done(err, false);
     }
   })
 );
 
-module.exports = { JwtStrategy, ExtractJwt };
+module.exports = passport;

@@ -1,10 +1,6 @@
 const LogoutUser = (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      console.error(err);
-    }
-    res.redirect("/");
-  });
+  res.clearCookie("jwt");
+  res.redirect("/");
 };
 
 module.exports = { LogoutUser };

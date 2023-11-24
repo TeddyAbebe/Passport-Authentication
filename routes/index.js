@@ -4,6 +4,7 @@ const { Register, registerUser } = require("./RegisterRoute");
 const { Profile } = require("./ProfileRoute");
 const { LogoutUser } = require("./LogoutRoute");
 const { Google, GoogleUser } = require("./GoogleRoutes");
+const passport = require("passport");
 
 // Home Routes
 router.get("/", (req, res) => {
@@ -21,7 +22,11 @@ router.get("/login", Login);
 router.post("/login", loginUser);
 
 // Protected Route
-router.get("/profile", Profile);
+router.get(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  Profile
+);
 
 // Logout Route
 router.get("/logout", LogoutUser);
