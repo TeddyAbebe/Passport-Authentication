@@ -1,6 +1,7 @@
 const passport = require("passport");
 const LocalStrategy = require("./passport-local");
 const GoogleStrategy = require("./passport-google");
+const { JwtStrategy } = require("./passport-JWT");
 const User = require("../models/User");
 
 passport.serializeUser((user, done) => {
@@ -16,4 +17,4 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-module.exports = { LocalStrategy, GoogleStrategy };
+module.exports = { LocalStrategy, GoogleStrategy, JwtStrategy };

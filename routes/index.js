@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const passport = require("passport");
 const { Login, loginUser } = require("./LoginRoute");
 const { Register, registerUser } = require("./RegisterRoute");
 const { Profile } = require("./ProfileRoute");

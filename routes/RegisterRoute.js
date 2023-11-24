@@ -8,7 +8,6 @@ const Register = (req, res) => {
 const registerUser = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    console.log(hashedPassword);
 
     let user = new User({
       name: req.body.name,
@@ -17,12 +16,9 @@ const registerUser = async (req, res) => {
     });
 
     await user.save();
-    console.log(user);
-
     res.redirect("/login");
   } catch (err) {
     console.error(err);
-    req.flash("error", "Registration failed. Please try again.");
     res.redirect("/register");
   }
 };
