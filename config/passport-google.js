@@ -11,19 +11,28 @@ passport.use(
       callbackURL: "http://localhost:3000/google/redirect",
     },
     async (accessToken, refreshToken, profile, cb) => {
-      console.log(accessToken, profile);
-
       try {
         const email = profile.emails ? profile.emails[0].value : null;
-        const existingUser = await User.findOne({ googleId: profile.id });
+        const existingUser = await User.findOne({ email: email });
 
         if (existingUser) {
+          existingUser.google = {
+            id: profile.id,
+            email: email,
+            name: profile.displayName,
+          };
+
+          await existingUser.save();
           return cb(null, existingUser);
         } else {
           const newUser = new User({
             name: profile.displayName,
             email: email,
-            googleId: profile.id,
+            google: {
+              id: profile.id,
+              email: email,
+              name: profile.displayName,
+            },
           });
 
           await newUser.save();
@@ -36,15 +45,4 @@ passport.use(
   )
 );
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
+module.exports = GoogleStrategy;

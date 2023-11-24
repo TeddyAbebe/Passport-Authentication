@@ -28,8 +28,8 @@ router.get("/profile", Profile);
 router.get("/logout", LogoutUser);
 
 // Google OAuth
-router.get("/google", Google)
+router.get("/google", Google);
 
-router.get("/google/redirect", GoogleUser)
+router.get("/google/redirect", GoogleUser);
 
 module.exports = router;

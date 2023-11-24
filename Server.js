@@ -7,6 +7,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const flash = require("connect-flash");
+const { LocalStrategy, GoogleStrategy } = require("./config");
 
 const app = express();
 
@@ -36,7 +37,8 @@ app.use(
   })
 );
 
-require("./config/passport");
+passport.use(LocalStrategy);
+passport.use(GoogleStrategy);
 
 app.use(passport.initialize());
 app.use(passport.session());

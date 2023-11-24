@@ -1,20 +1,30 @@
-const { hashSync } = require("bcrypt");
+const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
 const Register = (req, res) => {
   res.render("home", { body: "register" });
 };
 
-const registerUser = (req, res) => {
-  let user = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: hashSync(req.body.password, 10),
-  });
+const registerUser = async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    console.log(hashedPassword);
 
-  user.save().then((user) => console.log(user));
+    let user = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: hashedPassword,
+    });
 
-  res.send({ success: true });
+    await user.save();
+    console.log(user);
+
+    res.redirect("/login");
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Registration failed. Please try again.");
+    res.redirect("/register");
+  }
 };
 
 module.exports = { Register, registerUser };
