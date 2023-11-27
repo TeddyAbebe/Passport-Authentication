@@ -7,7 +7,7 @@ const {
 } = require("../controllers/auth");
 const { Google, GoogleUser } = require("../controllers/google");
 const { body } = require("express-validator");
-const validator = require("../validator/RegistrationValidator");
+const validator = require("../validator/RegValidator");
 
 const router = require("express").Router();
 
