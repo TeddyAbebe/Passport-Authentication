@@ -1,6 +1,5 @@
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 const Google = passport.authenticate("google", { scope: ["profile", "email"] });
 
@@ -11,7 +10,7 @@ const GoogleUser = (req, res, next) => {
     }
 
     if (!user) {
-      return res.redirect("/login");
+      return res.redirect("/auth/login");
     }
 
     const payload = {

@@ -1,7 +1,7 @@
 require("dotenv").config();
 const passport = require("passport");
 const JwtStrategy = require("passport-jwt").Strategy;
-const User = require("../models/User");
+const User = require("../../../models/User");
 
 const cookieExtractor = (req) => {
   let token = null;

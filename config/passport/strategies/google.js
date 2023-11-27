@@ -1,5 +1,5 @@
 const passport = require("passport");
-const User = require("../models/User");
+const User = require("../../../models/User");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 require("dotenv").config();
 
@@ -8,7 +8,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/google/redirect",
+      callbackURL: "http://localhost:3000/auth/google/redirect",
     },
     async (accessToken, refreshToken, profile, cb) => {
       try {

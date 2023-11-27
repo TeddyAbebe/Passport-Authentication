@@ -1,13 +1,14 @@
-const passport = require("passport");
-
 const Profile = (req, res) => {
   if (req.isAuthenticated()) {
+    res.setHeader("Cache-Control", "no-store, private, must-revalidate");
     res.render("home", {
       user: req.user,
       body: "profile",
     });
   } else {
-    res.redirect("/login");
+    res.render("home", {
+      body: "login",
+    });
   }
 };
 

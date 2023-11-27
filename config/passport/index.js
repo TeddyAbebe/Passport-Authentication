@@ -1,8 +1,8 @@
 const passport = require("passport");
-const LocalStrategy = require("./passport-local");
-const GoogleStrategy = require("./passport-google");
-const JwtStrategy = require("./passport-JWT");
-const User = require("../models/User");
+const LocalStrategy = require("./strategies/local");
+const GoogleStrategy = require("./strategies/google");
+const JwtStrategy = require("./strategies/jwt");
+const User = require("../../models/User");
 
 passport.serializeUser((user, done) => {
   done(null, user.id);

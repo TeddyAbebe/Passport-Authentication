@@ -2,8 +2,24 @@
   <div class="col-md-6 m-auto">
     <div class="card card-body">
       <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i> Login</h1>
+      <% if (messages && messages.length > 0) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <% messages.forEach(message => { %>
+        <li><strong><%= message.msg %></strong></li>
+        <% }); %>
 
-      <form action="/login" method="POST">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %>
+
+      <form action="/auth/login" method="POST">
         <div class="form-group">
           <label for="email">Email</label>
           <input
@@ -26,15 +42,19 @@
         </div>
         <button type="submit" class="btn btn-primary btn-block">Login</button>
       </form>
-      <p class="lead mt-4">No Account ? <a href="/register">Register</a></p>
+      <p class="lead mt-4">
+        No Account ? <a href="/auth/register">Register</a>
+      </p>
     </div>
 
     <div class="card card-body text-center flex-row mt-5">
-      <a href="/google" class="btn btn-danger mb-2 mr-5 ml-5 width-[10px]"
+      <a href="/auth/google" class="btn btn-danger mb-2 mr-5 ml-5 width-[10px]"
         >Sign in with Google +</a
       >
 
-      <a href="/facebook" class="btn btn-primary btn-sm mb-2 ml-5 width-[10px]"
+      <a
+        href="/auth/facebook"
+        class="btn btn-primary btn-sm mb-2 ml-5 width-[10px]"
         >Sign in with Facebook</a
       >
     </div>
