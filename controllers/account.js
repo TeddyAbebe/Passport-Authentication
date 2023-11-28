@@ -81,7 +81,7 @@ const assignInstructor = async (req, res) => {
       .save()
       .then(messages.push("User assigned as an Instructor successfully"));
 
-    // Fetch updated user list (excluding Instructors and Admins)
+    // Fetch updated user list
     const users = await User.find();
 
     res.render("home", {
