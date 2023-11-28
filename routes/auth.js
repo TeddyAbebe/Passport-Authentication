@@ -1,15 +1,13 @@
+const router = require("express").Router();
 const {
   Register,
   registerUser,
   Login,
   loginUser,
-  LogoutUser,
+  logoutUser,
 } = require("../controllers/auth");
 const { Google, GoogleUser } = require("../controllers/google");
-const { body } = require("express-validator");
 const validator = require("../validator/RegValidator");
-
-const router = require("express").Router();
 
 // Register Routes
 router.get("/register", Register);
@@ -22,7 +20,7 @@ router.get("/login", Login);
 router.post("/login", loginUser);
 
 // Logout Route
-router.get("/logout", LogoutUser);
+router.get("/logout", logoutUser);
 
 // Google OAuth
 router.get("/google", Google);
