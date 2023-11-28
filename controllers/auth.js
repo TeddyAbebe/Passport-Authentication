@@ -59,8 +59,11 @@ const Register = (req, res) => {
 
 const registerUser = async (req, res) => {
   const errors = validationResult(req);
+  const messages = [];
+
   if (!errors.isEmpty()) {
-    return res.render("home", { body: "register", messages: errors.array() });
+    messages.push(...errors.array());
+    return res.render("home", { body: "register", messages: messages });
   }
 
   try {

@@ -4,8 +4,8 @@ const validator = [
   body("name")
     .notEmpty()
     .withMessage("Name is required")
-    .isLength({ min: 20 })
-    .withMessage("User name must not be that long"),
+    .isLength({ max: 20 })
+    .withMessage("User Name should not be that long."),
   body("email").isEmail().withMessage("Invalid email").normalizeEmail(),
   body("password")
     .isLength({ min: 6 })
