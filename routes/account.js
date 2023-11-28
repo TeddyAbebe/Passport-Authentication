@@ -10,6 +10,7 @@ const {
   getUsers,
 } = require("../controllers/account");
 const { isStudent, isInstructor, isAdmin } = require("../middleware/authorize");
+const User = require("../models/User");
 
 // Home Routes
 router.get("/", (req, res) => {
@@ -37,13 +38,13 @@ router.get(
 );
 
 router.get(
-  "/student-dashboard",
+  "/admin-dashboard",
   passport.authenticate("jwt", {
     session: false,
     failureRedirect: "/auth/login",
   }),
-  isStudent,
-  Student
+  isAdmin,
+  Admin
 );
 
 router.get(
@@ -57,36 +58,13 @@ router.get(
 );
 
 router.get(
-  "/admin-dashboard",
+  "/student-dashboard",
   passport.authenticate("jwt", {
     session: false,
     failureRedirect: "/auth/login",
   }),
-  isAdmin,
-  Admin
-);
-
-router.get(
-  "/courses",
-  passport.authenticate("jwt", {
-    session: false,
-    failureRedirect: "/auth/login",
-  }),
-  (req, res) => {
-    res.render("home", { body: "courses", user: req.user });
-  }
-);
-
-router.get(
-  "/studentsList",
-  passport.authenticate("jwt", {
-    session: false,
-    failureRedirect: "/auth/login",
-  }),
-  isInstructor,
-  (req, res) => {
-    res.render("home", { body: "studentList", user: req.user });
-  }
+  isStudent,
+  Student
 );
 
 // Admin route to view and assign instructors
@@ -110,4 +88,69 @@ router.post(
   isAdmin,
   assignInstructor
 );
+
+// Course List route
+router.get(
+  "/courses",
+  passport.authenticate("jwt", {
+    session: false,
+    failureRedirect: "/auth/login",
+  }),
+  (req, res) => {
+    res.render("home", { body: "courses", user: req.user });
+  }
+);
+
+// Student List route
+router.get(
+  "/studentsList",
+  passport.authenticate("jwt", {
+    session: false,
+    failureRedirect: "/auth/login",
+  }),
+  isAdmin,
+  (req, res) => {
+    res.render("home", { body: "studentList", user: req.user });
+  }
+);
+
+// Instructor List route
+router.get(
+  "/instructorsList",
+  passport.authenticate("jwt", {
+    session: false,
+    failureRedirect: "/auth/login",
+  }),
+  isAdmin,
+  async (req, res) => {
+    try {
+      // Fetch instructors from the database
+      const instructors = await User.find({ role: "Instructor" });
+
+      // Render the page with the list of instructors
+      res.render("home", {
+        body: "instructorList",
+        user: req.user,
+        instructors,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+);
+
+// Instructor Students List
+router.get(
+  "/myStudents",
+  passport.authenticate("jwt", {
+    session: false,
+    failureRedirect: "/auth/login",
+  }),
+  isInstructor,
+  (req, res) => {
+    res.render("home", { body: "myStudents", user: req.user });
+  }
+);
+
 module.exports = router;

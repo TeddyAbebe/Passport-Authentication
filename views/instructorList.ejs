@@ -1,0 +1,35 @@
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body text-center">
+      <p class="lead mt-4">
+        <a href="/dashboard" class="btn btn-primary btn-block mb-2"
+          >Dashboard</a
+        >
+      </p>
+      <h1 class="mb-5">Instructors List</h1>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Role</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% instructors.forEach(instructor => { %>
+          <tr>
+            <td><%= instructor.name %></td>
+            <td><%= instructor.role %></td>
+            <td>
+              <button class="btn btn-warning" type="submit">
+                Assign Course
+              </button>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
