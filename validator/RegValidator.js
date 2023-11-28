@@ -1,7 +1,8 @@
 const { body } = require("express-validator");
 
 const validator = [
-  body("name").notEmpty().withMessage("Name is required"),
+  body("name").notEmpty().withMessage("Name is required").isLength({ min: 20 }),
+  withMessage("User name must not be that long"),
   body("email").isEmail().withMessage("Invalid email").normalizeEmail(),
   body("password")
     .isLength({ min: 6 })
