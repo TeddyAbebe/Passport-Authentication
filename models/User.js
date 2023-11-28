@@ -10,6 +10,11 @@ const userSchema = new Schema({
     email: String,
     name: String,
   },
+  role: {
+    type: String,
+    enum: ["Student", "Instructor", "Admin"],
+    default: "Student",
+  },
 });
 
 const User = mongoose.model("User", userSchema);

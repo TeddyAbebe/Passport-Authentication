@@ -1,0 +1,60 @@
+<div class="row mt-5">
+  <div class="col-md-8 m-auto">
+    <div class="card card-body text-center">
+      <p class="lead mt-4">
+        <a href="/dashboard" class="btn btn-primary btn-block mb-2"
+          >Dashboard</a
+        >
+      </p>
+      <h1 class="mb-5">User List</h1>
+
+      <% if (messages.length > 0) { %>
+      <div class="alert alert-success" role="alert">
+        <%= messages.join("<br />") %>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Role</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(user => { %> <% if (user.role !== "Admin") { %>
+          <tr>
+            <td><%= user.name %></td>
+            <td><%= user.role %></td>
+
+            <% if (user.role !== "Instructor") { %>
+            <td>
+              <form
+                action="/assign-instructor/<%= user._id %>"
+                method="post"
+                style="display: inline"
+              >
+                <button class="btn btn-primary" type="submit">Assign</button>
+              </form>
+            </td>
+            <% } else { %>
+            <td>
+              <button class="btn btn-warning" type="submit">Assigned</button>
+            </td>
+            <% } %>
+          </tr>
+          <% } %> <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

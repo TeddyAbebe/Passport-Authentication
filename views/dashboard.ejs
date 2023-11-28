@@ -1,0 +1,55 @@
+<div class="row mt-5">
+  <div class="col-md-6 m-auto">
+    <div class="card card-body text-center">
+      <% let greeting = "Welcome"; %> <% if (user.role === "Student") { greeting
+      = "Welcome Student"; } %> <% if (user.role === "Instructor") { greeting =
+      "Welcome Teacher"; } %> <% if (user.role === "Admin") { greeting =
+      "Welcome Admin"; } %>
+
+      <h1 class="text-center mb-3 font-weight-bold">
+        <%= greeting %><br />
+        <strong class="text-muted"> <%= user.name %> </strong>
+      </h1>
+
+      <p class="lead mt-4">
+        <a href="<%= dashboardRoute %>" class="btn btn-primary btn-block mb-2"
+          >Profile</a
+        >
+      </p>
+
+      <% if (user.role === "Student") { %>
+      <p class="lead mt-4">
+        <a href="/courses" class="btn btn-info btn-block mb-2">Courses</a>
+      </p>
+      <% } %> <% if (user.role === "Instructor") { %>
+      <p class="lead mt-4">
+        <a href="/studentsList" class="btn btn-success btn-block mb-2"
+          >Students List</a
+        >
+      </p>
+
+      <p class="lead mt-4">
+        <a href="/courses" class="btn btn-info btn-block mb-2">Courses</a>
+      </p>
+      <% } %> <% if (user.role === "Admin") { %>
+      <p class="lead mt-4">
+        <a href="/users-list" class="btn btn-warning btn-block mb-2"
+          >User List</a
+        >
+      </p>
+
+      <p class="lead mt-4">
+        <a href="" class="btn btn-info btn-block mb-2">Instructors List</a>
+      </p>
+
+      <p class="lead mt-4">
+        <a href="" class="btn btn-info btn-block mb-2">Students List</a>
+      </p>
+
+      <p class="lead mt-4">
+        <a href="" class="btn btn-info btn-block mb-2">Course List</a>
+      </p>
+      <% } %>
+    </div>
+  </div>
+</div>

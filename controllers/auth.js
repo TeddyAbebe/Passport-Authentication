@@ -38,7 +38,7 @@ const loginUser = async (req, res) => {
     // Send the token to the client
     res.cookie("token", token, { httpOnly: true });
 
-    return res.redirect("/profile");
+    return res.redirect("/dashboard");
   } catch (error) {
     console.error(error);
     messages.push({ msg: "Internal Server Error" });
@@ -69,10 +69,15 @@ const registerUser = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
+    const defaultRole = "Student";
+    const isAdmin = req.body.email === "admin@admin.com";
+    const role = isAdmin ? "Admin" : defaultRole;
+
     let user = new User({
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword,
+      role: role,
     });
 
     await user.save();
