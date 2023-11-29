@@ -11,9 +11,10 @@ const {
   updateCourse,
   deleteCourse,
   assignInstructor,
-  lisInstructors,
+  listInstructors,
   listStudents,
   enrollInstructor,
+  disEnrollInstructor,
 } = require("../controllers/adminController");
 
 // Admin route to view and assign Instructors
@@ -57,7 +58,7 @@ router.get(
     failureRedirect: "/auth/login",
   }),
   isAdmin,
-  lisInstructors
+  listInstructors
 );
 
 // Course List route
@@ -117,9 +118,24 @@ router.delete(
 
 // Enroll Course to instructor
 router.post(
-  "/assign-instructor/",
+  "/assign-instructor",
+  passport.authenticate("jwt", {
+    session: false,
+    failureRedirect: "/auth/login",
+  }),
   isAdmin,
   enrollInstructor
+);
+
+// DisEnroll Course to instructor
+router.post(
+  "/remove-instructor",
+  passport.authenticate("jwt", {
+    session: false,
+    failureRedirect: "/auth/login",
+  }),
+  isAdmin,
+  disEnrollInstructor
 );
 
 // Enroll Course to student

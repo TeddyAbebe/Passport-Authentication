@@ -56,16 +56,31 @@ const assignInstructor = async (req, res) => {
 };
 
 // List Instructors
-const lisInstructors = async (req, res) => {
+const listInstructors = async (req, res) => {
   try {
     // Fetch instructors from the database
     const instructors = await User.find({ role: "Instructor" });
 
-    // Render the page with the list of instructors
+    // Fetch assigned courses for each instructor
+    const instructorsWithCourses = await Promise.all(
+      instructors.map(async (instructor) => {
+        const assignedCourses = await Course.find({
+          "instructors.instructorId": instructor._id,
+        });
+
+        console.log("Instructor with Courses:", {
+          ...instructor.toObject(),
+          assignedCourses,
+        });
+        return { ...instructor.toObject(), assignedCourses };
+      })
+    );
+
+    // Render the page with the list of instructors and assigned courses
     res.render("home", {
       body: "instructorList",
       user: req.user,
-      instructors,
+      instructors: instructorsWithCourses,
     });
   } catch (error) {
     console.error(error);
@@ -196,29 +211,123 @@ const deleteCourse = async (req, res) => {
 // Enroll an instructor to a course
 const enrollInstructor = async (req, res) => {
   const { code, instructorId } = req.body;
+  const messages = [];
 
   try {
     // Find the course by code
     const course = await Course.findOne({ code });
 
     if (!course) {
-      return res.status(404).json({ message: "Course not found" });
+      messages.push("Course not found");
+    } else {
+      // Check if the instructorId is valid
+      const instructor = await User.findById(instructorId);
+
+      if (!instructor || instructor.role !== "Instructor") {
+        messages.push("Instructor not found");
+      } else {
+        // Check if the instructor is already enrolled in the course
+        if (
+          course.instructors &&
+          course.instructors.some(
+            (inst) =>
+              inst.instructorId && inst.instructorId.equals(instructorId)
+          )
+        ) {
+          messages.push("Instructor already enrolled in the course");
+        } else {
+          // Enroll the instructor in the course
+          course.instructors.push({
+            instructorId: instructor._id,
+            instructorName: instructor.name,
+          });
+
+          // Update assignedCourses for the instructor
+          const assignedCourse = {
+            courseId: course._id,
+            courseName: course.name,
+            courseCode: course.code,
+          };
+
+          instructor.assignedCourses.push(assignedCourse);
+
+          await Promise.all([course.save(), instructor.save()]);
+
+          messages.push("Instructor enrolled successfully");
+        }
+      }
     }
 
-    // Check if the instructorId is valid (you may want additional validation here)
-    const instructor = await User.findById(instructorId);
+    // Get instructors and courses
+    const instructors = await User.find({ role: "Instructor" });
+    const courses = await Course.find();
 
-    if (!instructor || instructor.role !== "Instructor") {
-      return res.status(404).json({ message: "Instructor not found" });
-    }
-
-    // Enroll the instructor in the course
-    course.instructors.push(instructorId);
-    await course.save();
-
-    res.json({ message: "Instructor enrolled successfully", course });
+    res.render("home", {
+      body: "courses",
+      user: req.user,
+      messages,
+      courses,
+      instructors,
+    });
   } catch (error) {
     console.error("Error enrolling instructor:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+// DisEnroll Instructor from a course
+const disEnrollInstructor = async (req, res) => {
+  const { code, instructorId } = req.body;
+  let messages = [];
+
+  try {
+    // Find the course by code
+    const course = await Course.findOne({ code });
+
+    if (!course) {
+      messages.push("Course not found");
+    } else {
+      // Check if the instructorId is valid
+      const instructor = await User.findById(instructorId);
+
+      if (!instructor || instructor.role !== "Instructor") {
+        messages.push("Instructor not found");
+      } else {
+        // Check if the instructors array exists and is an array
+        if (course.instructors && Array.isArray(course.instructors)) {
+          // Check if the instructor is enrolled in the course
+          const instructorIndex = course.instructors.findIndex(
+            (inst) =>
+              inst.instructorId && inst.instructorId.equals(instructorId)
+          );
+
+          if (instructorIndex !== -1) {
+            // Remove the instructor from the course
+            course.instructors.splice(instructorIndex, 1);
+            await course.save();
+            messages.push("Instructor removed successfully");
+          } else {
+            messages.push("Instructor is not enrolled in the course");
+          }
+        } else {
+          messages.push("Invalid instructors array in the course");
+        }
+      }
+    }
+
+    // Get instructors and courses
+    const instructors = await User.find({ role: "Instructor" });
+    const courses = await Course.find();
+
+    res.render("home", {
+      body: "courses",
+      user: req.user,
+      courses,
+      instructors,
+      messages,
+    });
+  } catch (error) {
+    console.error("Error removing instructor:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -256,8 +365,9 @@ module.exports = {
   createCourse,
   updateCourse,
   deleteCourse,
-  lisInstructors,
+  listInstructors,
   listStudents,
   enrollInstructor,
+  disEnrollInstructor,
   enrollStudent,
 };

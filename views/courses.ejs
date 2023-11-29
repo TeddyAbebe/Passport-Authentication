@@ -6,39 +6,82 @@
       </h1>
 
       <p class="lead">
-        <a href="/dashboard" class="btn btn-primary btn-block mb-2">Dashboard</a>
+        <a href="/dashboard" class="btn btn-primary btn-block mb-2"
+          >Dashboard</a
+        >
       </p>
 
       <h1>Course List</h1>
+
       <table class="table table-bordered">
         <thead>
           <tr>
             <th scope="col">Code</th>
             <th scope="col">Course Name</th>
             <th scope="col">Action</th>
+            <th scope="col">Instructor</th>
           </tr>
         </thead>
         <tbody>
           <% courses.forEach(course => { %>
-            <tr>
-              <td><%= course.code %></td>
-              <td><%= course.name %></td>
-              <td>
-                <!-- Add a form to assign an instructor -->
-                <form action="/admin/assign-instructor" method="post" style="display: inline;">
-                  <!-- Hidden input for the course code -->
-                  <input type="hidden" name="code" value="<%= course.code %>">
-                  <!-- Select input for choosing an instructor -->
-                  <select name="instructorId" class="form-control">
-                    <% instructors.forEach(instructor => { %>
-                      <option value="<%= instructor._id %>"><%= instructor.name %></option>
-                    <% }); %>
-                  </select>
-                  <!-- Submit button for the form -->
-                  <button class="btn btn-warning" type="submit">Assign Instructor</button>
-                </form>
-              </td>
-            </tr>
+          <tr>
+            <td><%= course.code %></td>
+            <td class="text-sm"><%= course.name %></td>
+            <td>
+              <form
+                action="/admin/assign-instructor"
+                method="post"
+                style="display: inline"
+              >
+                <input type="hidden" name="code" value="<%= course.code %>" />
+
+                <select name="instructorId" class="form-control">
+                  <% instructors.forEach(instructor => { %>
+                  <option value="<%= instructor._id %>">
+                    <%= instructor.name %>
+                  </option>
+                  <% }); %>
+                </select>
+                <button class="btn btn-sm btn-warning" type="submit">
+                  Assign Instructor
+                </button>
+              </form>
+            </td>
+            <td>
+              <% if (course.instructors.length > 0) { %>
+              <div
+                style="display: flex; flex-direction: column; align-items: end"
+              >
+                <% course.instructors.forEach(instructor => { %>
+                <div
+                  style="display: flex; align-items: center; margin-bottom: 5px"
+                >
+                  <span><%= instructor.instructorName %></span>
+                  <form
+                    action="/admin/remove-instructor"
+                    method="post"
+                    style="display: flex; margin-left: 5px"
+                  >
+                    <input
+                      type="hidden"
+                      name="code"
+                      value="<%= course.code %>"
+                    />
+                    <input
+                      type="hidden"
+                      name="instructorId"
+                      value="<%= instructor.instructorId %>"
+                    />
+                    <button class="btn btn-sm btn-danger" type="submit">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </form>
+                </div>
+                <% }); %>
+              </div>
+              <% } else { %> No Instructor Assigned <% } %>
+            </td>
+          </tr>
           <% }); %>
         </tbody>
       </table>
