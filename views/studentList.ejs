@@ -6,12 +6,35 @@
       </h1>
 
       <p class="lead mt-4">
-        <a href="/dashboard" class="btn btn-warning btn-block mb-2"
+        <a href="/dashboard" class="btn btn-primary btn-block mb-2"
           >Dashboard</a
         >
       </p>
 
-      <p>Student List</p>
+      <h1>Student List</h1>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Role</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% students.forEach(student => { %>
+          <tr>
+            <td><%= student.name %></td>
+            <td><%= student.role %></td>
+            <td>
+              <button class="btn btn-warning" type="submit">
+                Assign Course
+              </button>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

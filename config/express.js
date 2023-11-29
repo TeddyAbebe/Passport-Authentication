@@ -8,6 +8,7 @@ module.exports = function (app) {
 
   // Middleware
   app.use(cookieParser());
+  app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(passport.initialize());
 };

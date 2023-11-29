@@ -1,17 +1,47 @@
 <div class="row mt-5">
-  <div class="col-md-6 m-auto">
+  <div class="col-md-8 m-auto">
     <div class="card card-body text-center">
-      <h1 class="text-center mb-3 font-weight-bold">
+      <h1 class="text-center font-weight-bold">
         Hello, <strong class="text-muted"> <%= user.name %> </strong>
       </h1>
 
-      <p class="lead mt-4">
-        <a href="/dashboard" class="btn btn-warning btn-block mb-2"
-          >Dashboard</a
-        >
+      <p class="lead">
+        <a href="/dashboard" class="btn btn-primary btn-block mb-2">Dashboard</a>
       </p>
 
-      <p>Course List</p>
+      <h1>Course List</h1>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Course Name</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% courses.forEach(course => { %>
+            <tr>
+              <td><%= course.code %></td>
+              <td><%= course.name %></td>
+              <td>
+                <!-- Add a form to assign an instructor -->
+                <form action="/admin/assign-instructor" method="post" style="display: inline;">
+                  <!-- Hidden input for the course code -->
+                  <input type="hidden" name="code" value="<%= course.code %>">
+                  <!-- Select input for choosing an instructor -->
+                  <select name="instructorId" class="form-control">
+                    <% instructors.forEach(instructor => { %>
+                      <option value="<%= instructor._id %>"><%= instructor.name %></option>
+                    <% }); %>
+                  </select>
+                  <!-- Submit button for the form -->
+                  <button class="btn btn-warning" type="submit">Assign Instructor</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

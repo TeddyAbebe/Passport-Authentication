@@ -47,50 +47,19 @@ const Admin = (req, res) => {
   res.render("home", { body: "admin", user: req.user });
 };
 
-const getUsers = async (req, res) => {
-  try {
-    // Fetch all users
-    const users = await User.find();
+// const getUsers = async (req, res) => {
+//   try {
+//     // Fetch all users
+//     const users = await User.find();
 
-    res.render("home", { body: "usersList", users, messages: [] });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
+//     res.render("home", { body: "usersList", users, messages: [] });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
 
-const assignInstructor = async (req, res) => {
-  const userId = req.params.userId;
-  const messages = [];
 
-  // Find the user to assign as an instructor
-  const user = await User.findById(userId);
-
-  if (!user) {
-    const users = await User.find();
-    messages.push("User not found");
-    return res.status(404).render("home", {
-      body: "usersList",
-      users,
-      messages: messages,
-    });
-  } else {
-    // Assign the user as an instructor
-    user.role = "Instructor";
-    await user
-      .save()
-      .then(messages.push("User assigned as an Instructor successfully"));
-
-    // Fetch updated user list
-    const users = await User.find();
-
-    res.render("home", {
-      body: "usersList",
-      users,
-      messages: messages,
-    });
-  }
-};
 
 module.exports = {
   Profile,
@@ -98,6 +67,4 @@ module.exports = {
   Instructor,
   Dashboard,
   Admin,
-  assignInstructor,
-  getUsers,
 };
