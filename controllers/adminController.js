@@ -217,11 +217,11 @@ const updateCourse = async (req, res) => {
     // Save the updated course
     await existingCourse.save();
 
-    // Update course details in assignedCourses array for each instructor
+    // Update course details in Courses array for each instructor
     const instructors = await User.find({ role: "Instructor" });
 
     for (const instructor of instructors) {
-      const assignedCourse = instructor.assignedCourses.find(
+      const assignedCourse = instructor.Courses.find(
         (assignedCourse) =>
           assignedCourse.courseId && assignedCourse.courseId.equals(courseId)
       );
@@ -235,11 +235,11 @@ const updateCourse = async (req, res) => {
     // Save the updated instructors
     await Promise.all(instructors.map((instructor) => instructor.save()));
 
-    // Update course details in enrolledCourses array for each student
+    // Update course details in Courses array for each student
     const students = await User.find({ role: "Student" });
 
     for (const student of students) {
-      const enrolledCourse = student.enrolledCourses.find(
+      const enrolledCourse = student.Courses.find(
         (course) => course.courseId && course.courseId.equals(courseId)
       );
 
@@ -291,34 +291,34 @@ const deleteCourse = async (req, res) => {
     // Remove the course from the database
     await course.deleteOne();
 
-    // Remove the course from the assignedCourses array of all instructors
+    // Remove the course from the Courses array of all instructors
     const instructors = await User.find({ role: "Instructor" });
 
     for (const instructor of instructors) {
-      const assignedCourseIndex = instructor.assignedCourses.findIndex(
+      const assignedCourseIndex = instructor.Courses.findIndex(
         (assignedCourse) =>
           assignedCourse.courseId && assignedCourse.courseId.equals(courseId)
       );
 
       if (assignedCourseIndex !== -1) {
-        instructor.assignedCourses.splice(assignedCourseIndex, 1);
+        instructor.Courses.splice(assignedCourseIndex, 1);
       }
     }
 
     // Save the updated instructors
     await Promise.all(instructors.map((instructor) => instructor.save()));
 
-    // Remove the course from the enrolledCourses array of all students
+    // Remove the course from the Courses array of all students
     const students = await User.find({ role: "Student" });
 
     for (const student of students) {
-      const enrolledCourseIndex = student.enrolledCourses.findIndex(
+      const enrolledCourseIndex = student.Courses.findIndex(
         (enrolledCourse) =>
           enrolledCourse.courseId && enrolledCourse.courseId.equals(courseId)
       );
 
       if (enrolledCourseIndex !== -1) {
-        student.enrolledCourses.splice(enrolledCourseIndex, 1);
+        student.Courses.splice(enrolledCourseIndex, 1);
       }
     }
 
@@ -377,14 +377,14 @@ const enrollInstructor = async (req, res) => {
             instructorName: instructor.name,
           });
 
-          // Update assignedCourses for the instructor
+          // Update Courses for the instructor
           const assignedCourse = {
             courseId: course._id,
             courseName: course.name,
             courseCode: course.code,
           };
 
-          instructor.assignedCourses.push(assignedCourse);
+          instructor.Courses.push(assignedCourse);
 
           await Promise.all([course.save(), instructor.save()]);
 
@@ -436,15 +436,15 @@ const disEnrollInstructor = async (req, res) => {
           // Remove the instructor from the course
           course.instructors.splice(instructorIndex, 1);
 
-          // Remove the course from the assignedCourses of the instructor
-          const assignedCourseIndex = instructor.assignedCourses.findIndex(
+          // Remove the course from the Courses of the instructor
+          const assignedCourseIndex = instructor.Courses.findIndex(
             (assignedCourse) =>
               assignedCourse.courseId &&
               assignedCourse.courseId.equals(course._id)
           );
 
           if (assignedCourseIndex !== -1) {
-            instructor.assignedCourses.splice(assignedCourseIndex, 1);
+            instructor.Courses.splice(assignedCourseIndex, 1);
           }
 
           await Promise.all([course.save(), instructor.save()]);
@@ -490,8 +490,8 @@ const enrollStudent = async (req, res) => {
       } else {
         // Check if the student is already enrolled in the course
         if (
-          student.enrolledCourses &&
-          student.enrolledCourses.some(
+          student.Courses &&
+          student.Courses.some(
             (enrolledCourse) =>
               enrolledCourse.courseId &&
               enrolledCourse.courseId.equals(courseId)
@@ -500,7 +500,7 @@ const enrollStudent = async (req, res) => {
           messages.push({ msg: "Student already enrolled in the course" });
         } else {
           // Enroll the student in the course
-          student.enrolledCourses.push({
+          student.Courses.push({
             courseId: course._id,
             courseName: course.name,
             courseCode: course.code,
@@ -544,14 +544,14 @@ const disEnrollStudent = async (req, res) => {
       messages.push({ msg: "Student not found" });
     } else {
       // Check if the student is enrolled in the specified course
-      const enrolledCourseIndex = student.enrolledCourses.findIndex(
+      const enrolledCourseIndex = student.Courses.findIndex(
         (enrolledCourse) =>
           enrolledCourse.courseId && enrolledCourse.courseId.equals(courseId)
       );
 
       if (enrolledCourseIndex !== -1) {
         // Remove the course from the student's enrolled courses
-        student.enrolledCourses.splice(enrolledCourseIndex, 1);
+        student.Courses.splice(enrolledCourseIndex, 1);
         await student.save();
         messages.push({ msg: "Student Dis-Enrolled from the Course" });
       } else {

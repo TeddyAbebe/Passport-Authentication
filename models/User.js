@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const enrolledCourseSchema = new Schema({
+const Courses = new Schema({
   courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
   courseName: String,
   courseCode: String,
@@ -21,14 +21,7 @@ const userSchema = new Schema({
     enum: ["Student", "Instructor", "Admin"],
     default: "Student",
   },
-  assignedCourses: [
-    {
-      courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
-      courseName: String,
-      courseCode: String,
-    },
-  ],
-  enrolledCourses: [enrolledCourseSchema],
+  Courses: [Courses],
 });
 
 const User = mongoose.model("User", userSchema);

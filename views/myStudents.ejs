@@ -2,7 +2,7 @@
   <div class="col-md-6 m-auto">
     <div class="card card-body text-center">
       <h1 class="text-center mb-3 font-weight-bold">
-        Hello, <strong class="text-muted"> <%= user.name %> </strong>
+        Hello, <strong class="text-muted"><%= user.name %></strong>
       </h1>
 
       <p class="lead mt-4">
@@ -11,7 +11,37 @@
         >
       </p>
 
-      <p>My Students List</p>
+      <h2><strong>My Students List</strong></h2>
+
+      <% studentsByCourse.forEach(course => { %>
+      <h4><%= course.courseName %> (<%= course.courseCode %>)</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Student Name</th>
+            <th scope="col">Grade</th>
+          </tr>
+        </thead>
+        <tbody style="border: 2px solid black">
+          <% const sortedStudents = course.students.sort((a, b) =>
+          a.name.localeCompare(b.name)); %> <% sortedStudents.forEach((student,
+          index) => { %>
+          <tr>
+            <th scope="row"><%= index + 1 %></th>
+            <td><%= student.name %></td>
+            <td>
+              <input
+                type="text"
+                name="grades[<%= student._id %>]"
+                placeholder="Enter grade"
+              />
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <% }); %>
     </div>
   </div>
 </div>

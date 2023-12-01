@@ -1,0 +1,40 @@
+<div class="row mt-5">
+  <div class="col-md-8 m-auto">
+    <div class="card card-body text-center">
+      <h1 class="text-center mb-3 font-weight-bold">
+        Hello, <strong class="text-muted"><%= user.name %></strong>
+      </h1>
+
+      <p class="lead mt-4">
+        <a href="/dashboard" class="btn btn-warning btn-block mb-2"
+          >Dashboard</a
+        >
+      </p>
+
+      <h2><strong>My Courses List</strong></h2>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Course Name</th>
+            <th scope="col">Course Code</th>
+            <th scope="col">Instructor</th>
+            <th scope="col">Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% coursesWithInstructors.forEach((course, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= course.name %></td>
+            <td><%= course.code %></td>
+            <td><%= course.instructors[0].instructorName %></td>
+            <td>N/A</td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

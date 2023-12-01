@@ -32,17 +32,13 @@
                 text-align: start;
               "
             >
-              <% if (instructor.assignedCourses &&
-              instructor.assignedCourses.length > 0) { %>
-              <ul>
-                <% instructor.assignedCourses.forEach(assignedCourse => { %>
-                <li>
-                  <%= assignedCourse.courseName %> (<%=
-                  assignedCourse.courseCode %>)
-                </li>
-                <% }); %>
-              </ul>
-              <% } else { %> No Assigned Courses <% } %>
+              <% if (instructor.Courses && instructor.Courses.length > 0) { %>
+              <% instructor.Courses.forEach(assignedCourse => { %>
+              <div style="display: flex; align-items: center">
+                * <%= assignedCourse.courseName %> (<%= assignedCourse.courseCode
+                %>)
+              </div>
+              <% }); %> <% } else { %> No Assigned Courses <% } %>
             </td>
           </tr>
           <% }); %>

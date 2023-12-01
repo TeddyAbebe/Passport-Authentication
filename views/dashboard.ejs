@@ -19,20 +19,25 @@
 
       <% if (user.role === "Student") { %>
       <p class="lead mt-4">
-        <a href="/courses" class="btn btn-info btn-block mb-2">Courses</a>
+        <a href="/myCourses" class="btn btn-info btn-block mb-2">My Courses</a>
       </p>
+      <% } %> 
 
-      <% } %> <% if (user.role === "Instructor") { %>
+
+
+      
+      <% if (user.role === "Instructor") { %>
       <p class="lead mt-4">
         <a href="/myStudents" class="btn btn-success btn-block mb-2"
           >My Students</a
         >
       </p>
+      <% } %> 
 
-      <p class="lead mt-4">
-        <a href="/courses" class="btn btn-info btn-block mb-2">Courses</a>
-      </p>
-      <% } %> <% if (user.role === "Admin") { %>
+
+      
+      
+      <% if (user.role === "Admin") { %>
       <p class="lead mt-4">
         <a href="/admin/users-list" class="btn btn-warning btn-block mb-2"
           >User List</a
