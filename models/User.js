@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const enrolledCourseSchema = new Schema({
+  courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
+  courseName: String,
+  courseCode: String,
+});
+
 const userSchema = new Schema({
   name: String,
   email: { type: String, unique: true },
@@ -22,6 +28,7 @@ const userSchema = new Schema({
       courseCode: String,
     },
   ],
+  enrolledCourses: [enrolledCourseSchema],
 });
 
 const User = mongoose.model("User", userSchema);

@@ -4,17 +4,19 @@ const passport = require("passport");
 const { isAdmin } = require("../middleware/authorize");
 const {
   getUsers,
-  getAllCourses,
-  getCourseById,
+  assignInstructor,
   addCourse,
   createCourse,
   updateCourse,
   deleteCourse,
-  assignInstructor,
   listInstructors,
   listStudents,
   enrollInstructor,
   disEnrollInstructor,
+  enrollStudent,
+  disEnrollStudent,
+  assignInstToCourse,
+  allCourses,
 } = require("../controllers/adminController");
 
 // Admin route to view and assign Instructors
@@ -61,7 +63,18 @@ router.get(
   listInstructors
 );
 
-// Course List route
+// Assign Instructor To Course
+router.get(
+  "/assign-Inst-To-Course",
+  passport.authenticate("jwt", {
+    session: false,
+    failureRedirect: "/auth/login",
+  }),
+  isAdmin,
+  assignInstToCourse
+);
+
+// Get All Courses
 router.get(
   "/courses",
   passport.authenticate("jwt", {
@@ -69,23 +82,23 @@ router.get(
     failureRedirect: "/auth/login",
   }),
   isAdmin,
-  getAllCourses
+  allCourses
 );
 
-// Get Course by ID
+// Add Course
 router.get(
-  "/courses/:id",
+  "/addCourses",
   passport.authenticate("jwt", {
     session: false,
     failureRedirect: "/auth/login",
   }),
   isAdmin,
-  getCourseById
+  addCourse
 );
 
-// Add Course
+// Create Course
 router.post(
-  "/addCourses",
+  "/createCourses",
   passport.authenticate("jwt", {
     session: false,
     failureRedirect: "/auth/login",
@@ -95,8 +108,8 @@ router.post(
 );
 
 // Update Course
-router.put(
-  "/courses/:id",
+router.post(
+  "/update-courses",
   passport.authenticate("jwt", {
     session: false,
     failureRedirect: "/auth/login",
@@ -107,7 +120,7 @@ router.put(
 
 // Delete Course
 router.delete(
-  "/courses/:id",
+  "/delete-course/:id",
   passport.authenticate("jwt", {
     session: false,
     failureRedirect: "/auth/login",
@@ -127,9 +140,9 @@ router.post(
   enrollInstructor
 );
 
-// DisEnroll Course to instructor
+// DisEnroll Course from Instructor
 router.post(
-  "/remove-instructor",
+  "/disEnroll-instructor",
   passport.authenticate("jwt", {
     session: false,
     failureRedirect: "/auth/login",
@@ -139,14 +152,25 @@ router.post(
 );
 
 // Enroll Course to student
-// router.post(
-//   "/assign-student/:courseId/:studentId",
-//   passport.authenticate("jwt", {
-//     session: false,
-//     failureRedirect: "/auth/login",
-//   }),
-//   isAdmin,
-//   enrollStudent
-// );
+router.post(
+  "/assign-course",
+  passport.authenticate("jwt", {
+    session: false,
+    failureRedirect: "/auth/login",
+  }),
+  isAdmin,
+  enrollStudent
+);
+
+// DisEnroll Course from student
+router.post(
+  "/disEnroll-course",
+  passport.authenticate("jwt", {
+    session: false,
+    failureRedirect: "/auth/login",
+  }),
+  isAdmin,
+  disEnrollStudent
+);
 
 module.exports = router;

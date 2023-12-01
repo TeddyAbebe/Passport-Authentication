@@ -1,6 +1,6 @@
 <div class="row mt-5">
-  <div class="col-md-8 m-auto">
-    <div class="card card-body text-center">
+  <div class="col-md-8" style="margin-left: 5%">
+    <div class="card card-body text-center" style="width: 60rem">
       <h1 class="text-center font-weight-bold">
         Hello, <strong class="text-muted"> <%= user.name %> </strong>
       </h1>
@@ -12,6 +12,28 @@
       </p>
 
       <h1>Course List</h1>
+
+      <% if (messages && messages.length > 0) { %>
+      <div
+        class="alert alert-success alert-dismissible fade show"
+        role="alert"
+        style="color: black"
+      >
+        <% messages.forEach(message => { %>
+        <strong><%= message.msg %></strong>
+        <% }); %>
+
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+          style="color: red"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %>
 
       <table class="table table-bordered">
         <thead>
@@ -58,7 +80,7 @@
                 >
                   <span><%= instructor.instructorName %></span>
                   <form
-                    action="/admin/remove-instructor"
+                    action="/admin/disEnroll-instructor"
                     method="post"
                     style="display: flex; margin-left: 5px"
                   >

@@ -1,6 +1,6 @@
 <div class="row mt-5">
-  <div class="col-md-6 m-auto">
-    <div class="card card-body text-center">
+  <div class="col-md-6" style="margin-left: 10%">
+    <div class="card card-body text-center" style="width: 50rem">
       <h1 class="text-center mb-3 font-weight-bold">
         Hello, <strong class="text-muted"> <%= user.name %> </strong>
       </h1>
@@ -13,23 +13,77 @@
 
       <h1>Student List</h1>
 
+      <% if (messages && messages.length > 0) { %>
+      <div
+        class="alert alert-success alert-dismissible fade show"
+        role="alert"
+        style="color: black"
+      >
+        <% messages.forEach(message => { %>
+        <strong><%= message.msg %></strong>
+        <% }); %>
+
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+          style="color: red"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %>
+
       <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Role</th>
-            <th scope="col">Actions</th>
+        <thead style="border: 2px solid black">
+          <tr style="border: 2px solid black">
+            <th scope="col" style="border: 2px solid black">Name</th>
+            <th scope="col" style="border: 2px solid black">Actions</th>
+            <th scope="col" style="border: 2px solid black">Course</th>
           </tr>
         </thead>
         <tbody>
           <% students.forEach(student => { %>
           <tr>
-            <td><%= student.name %></td>
-            <td><%= student.role %></td>
-            <td>
-              <button class="btn btn-warning" type="submit">
-                Assign Course
-              </button>
+            <td style="border: 2px solid black"><%= student.name %></td>
+            <td style="border: 2px solid black">
+              <form
+                action="/admin/assign-course"
+                method="post"
+                style="display: inline"
+              >
+                <input
+                  type="hidden"
+                  name="studentId"
+                  value="<%= student._id %>"
+                />
+
+                <select name="courseId" class="form-control">
+                  <% courses.forEach(course => { %>
+                  <option value="<%= course._id %>"><%= course.name %></option>
+                  <% }); %>
+                </select>
+
+                <button
+                  class="btn btn-warning btn-sm mt-1"
+                  type="submit"
+                  style="width: 7rem"
+                >
+                  Assign Course
+                </button>
+              </form>
+            </td>
+
+            <td style="flex-direction: column; border: 2px solid black">
+              <% student.enrolledCourses.forEach(enrolledCourse => { %>
+              <div>
+                <div style="display: flex; align-items: center">
+                  * <%= enrolledCourse.courseName %> ( <%=
+                  enrolledCourse.courseCode %> )
+                </div>
+              </div>
+              <% }); %>
             </td>
           </tr>
           <% }); %>
