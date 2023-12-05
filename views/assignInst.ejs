@@ -6,7 +6,7 @@
       </h1>
 
       <p class="lead">
-        <a href="/dashboard" class="btn btn-primary btn-block mb-2"
+        <a href="/User/dashboard" class="btn btn-primary btn-block mb-2"
           >Dashboard</a
         >
       </p>
@@ -51,7 +51,7 @@
             <td class="text-sm"><%= course.name %></td>
             <td>
               <form
-                action="/admin/assign-instructor"
+                action="/admin/Course/assign-instructor"
                 method="post"
                 style="display: inline"
               >
@@ -80,7 +80,7 @@
                 >
                   <span><%= instructor.instructorName %></span>
                   <form
-                    action="/admin/disEnroll-instructor"
+                    action="/admin/Course/disEnroll-instructor?_method=DELETE"
                     method="post"
                     style="display: flex; margin-left: 5px"
                   >

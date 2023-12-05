@@ -543,19 +543,29 @@ const disEnrollStudent = async (req, res) => {
     if (!student || student.role !== "Student") {
       messages.push({ msg: "Student not found" });
     } else {
-      // Check if the student is enrolled in the specified course
-      const enrolledCourseIndex = student.Courses.findIndex(
-        (enrolledCourse) =>
-          enrolledCourse.courseId && enrolledCourse.courseId.equals(courseId)
-      );
+      // Find the course by ID
+      const course = await Course.findById(courseId);
 
-      if (enrolledCourseIndex !== -1) {
-        // Remove the course from the student's enrolled courses
-        student.Courses.splice(enrolledCourseIndex, 1);
-        await student.save();
-        messages.push({ msg: "Student Dis-Enrolled from the Course" });
+      if (!course) {
+        messages.push({ msg: "Course not found" });
       } else {
-        messages.push({ msg: "Student is not Enrolled in the Course" });
+        // Check if the student is enrolled in the course
+        const enrolledCourseIndex = student.Courses.findIndex(
+          (enrolledCourse) =>
+            enrolledCourse.courseId && enrolledCourse.courseId.equals(courseId)
+        );
+
+        if (enrolledCourseIndex !== -1) {
+          // Remove the course from the student's Courses array
+          student.Courses.splice(enrolledCourseIndex, 1);
+
+          // Save the updated student
+          await student.save();
+
+          messages.push({ msg: "Student DisEnrolled Successfully" });
+        } else {
+          messages.push({ msg: "Student not Enrolled in the course" });
+        }
       }
     }
 
@@ -571,7 +581,7 @@ const disEnrollStudent = async (req, res) => {
       messages,
     });
   } catch (error) {
-    console.error("Error dis-enrolling student:", error);
+    console.error("Error disEnrolling student:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

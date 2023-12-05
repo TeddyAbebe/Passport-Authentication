@@ -6,7 +6,7 @@
       </h1>
 
       <p class="lead mt-4">
-        <a href="/dashboard" class="btn btn-primary btn-block mb-2"
+        <a href="/User/dashboard" class="btn btn-primary btn-block mb-2"
           >Dashboard</a
         >
       </p>
@@ -43,7 +43,7 @@
             <% if (user.role !== "Instructor") { %>
             <td>
               <form
-                action="/admin/assign-instructor/<%= user._id %>"
+                action="/admin/User/assign-instructor/<%= user._id %>"
                 method="post"
                 style="display: inline"
               >

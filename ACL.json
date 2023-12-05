@@ -1,0 +1,23 @@
+[
+  {
+    "role": "Admin",
+    "permissions": [
+      { "resource": "User", "actions": ["READ", "UPDATE", "CREATE"] },
+      {
+        "resource": "Course",
+        "actions": ["READ", "CREATE", "UPDATE", "DELETE"]
+      }
+    ]
+  },
+  {
+    "role": "Instructor",
+    "permissions": [
+      { "resource": "Course", "actions": ["READ"] },
+      { "resource": "User", "actions": ["READ"] }
+    ]
+  },
+  {
+    "role": "Student",
+    "permissions": [{ "resource": "Course", "actions": ["READ"] }]
+  }
+]

@@ -1,31 +1,17 @@
 const User = require("../models/User");
 const Course = require("../models/Course");
 
-const Profile = (req, res) => {
-  if (req.isAuthenticated()) {
-    res.setHeader("Cache-Control", "no-store, private, must-revalidate");
-    res.render("home", {
-      user: req.user,
-      body: "profile",
-    });
-  } else {
-    res.render("home", {
-      body: "login",
-    });
-  }
-};
-
 const Dashboard = (req, res) => {
   let dashboardRoute;
   switch (req.user.role) {
     case "Student":
-      dashboardRoute = "/student-dashboard";
+      dashboardRoute = "/student/User/student-dashboard";
       break;
     case "Instructor":
-      dashboardRoute = "/instructor-dashboard";
+      dashboardRoute = "/instructor/User/instructor-dashboard";
       break;
     case "Admin":
-      dashboardRoute = "/admin-dashboard";
+      dashboardRoute = "/admin/User/admin-dashboard";
       break;
   }
 
@@ -55,7 +41,7 @@ const myStudents = async (req, res) => {
     );
 
     if (!instructor || instructor.role !== "Instructor") {
-      return res.status(404).json({ message: "Instructor not found" });
+      return res.status(404).json("Sorry, You are not an Instructor");
     }
 
     const studentsByCourse = [];
@@ -99,7 +85,7 @@ const myCourses = async (req, res) => {
     const student = await User.findById(studentId).populate("Courses.courseId");
 
     if (!student || student.role !== "Student") {
-      return res.status(404).json({ message: "Student not found" });
+      return res.status(404).json("Sorry, You are not a Student");
     }
 
     // Extract enrolled courses
@@ -124,7 +110,6 @@ const myCourses = async (req, res) => {
 module.exports = myCourses;
 
 module.exports = {
-  Profile,
   Dashboard,
   Admin,
   Instructor,

@@ -38,7 +38,7 @@ const loginUser = async (req, res) => {
     // Send the token to the client
     res.cookie("token", token, { httpOnly: true });
 
-    return res.redirect("/dashboard");
+    return res.redirect("/User/dashboard");
   } catch (error) {
     console.error(error);
     messages.push({ msg: "Internal Server Error" });

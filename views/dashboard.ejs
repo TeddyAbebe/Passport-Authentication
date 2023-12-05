@@ -19,7 +19,7 @@
 
       <% if (user.role === "Student") { %>
       <p class="lead mt-4">
-        <a href="/myCourses" class="btn btn-info btn-block mb-2">My Courses</a>
+        <a href="/student/Course/myCourses" class="btn btn-info btn-block mb-2">My Courses</a>
       </p>
       <% } %> 
 
@@ -28,7 +28,7 @@
       
       <% if (user.role === "Instructor") { %>
       <p class="lead mt-4">
-        <a href="/myStudents" class="btn btn-success btn-block mb-2"
+        <a href="/instructor/User/myStudents" class="btn btn-success btn-block mb-2"
           >My Students</a
         >
       </p>
@@ -39,31 +39,31 @@
       
       <% if (user.role === "Admin") { %>
       <p class="lead mt-4">
-        <a href="/admin/users-list" class="btn btn-warning btn-block mb-2"
+        <a href="/admin/User/users-list" class="btn btn-warning btn-block mb-2"
           >User List</a
         >
       </p>
 
       <p class="lead mt-4">
-        <a href="/admin/instructorsList" class="btn btn-info btn-block mb-2">Instructors List</a>
+        <a href="/admin/User/instructorsList" class="btn btn-info btn-block mb-2">Instructors List</a>
       </p>
 
       <p class="lead mt-4">
-        <a href="/admin/studentsList" class="btn btn-info btn-block mb-2"
+        <a href="/admin/User/studentsList" class="btn btn-info btn-block mb-2"
           >Students List</a
         >
       </p>
 
       <p class="lead mt-4">
-        <a href="/admin/addCourses" class="btn btn-info btn-block mb-2">Add Course</a>
+        <a href="/admin/Course/addCourses" class="btn btn-info btn-block mb-2">Add Course</a>
       </p>
 
       <p class="lead mt-4">
-        <a href="/admin/courses" class="btn btn-info btn-block mb-2">Course List</a>
+        <a href="/admin/Course/courses" class="btn btn-info btn-block mb-2">Course List</a>
       </p>
 
       <p class="lead mt-4">
-        <a href="/admin/assign-Inst-To-Course" class="btn btn-info btn-block mb-2">Assign Instructor</a>
+        <a href="/admin/User/assign-Inst-To-Course" class="btn btn-info btn-block mb-2">Assign Instructor</a>
       </p>
       <% } %>
     </div>

@@ -6,7 +6,7 @@
       </h1>
 
       <p class="lead mt-4">
-        <a href="/dashboard" class="btn btn-warning btn-block mb-2"
+        <a href="/User/dashboard" class="btn btn-warning btn-block mb-2"
           >Dashboard</a
         >
       </p>
@@ -29,7 +29,11 @@
             <td><%= index + 1 %></td>
             <td><%= course.name %></td>
             <td><%= course.code %></td>
-            <td><%= course.instructors[0].instructorName %></td>
+            <td>
+              <% if (course.instructors && course.instructors.length > 0) { %>
+              <%= course.instructors[0].instructorName %> <% } else { %> Not Assigned <%
+              } %>
+            </td>
             <td>N/A</td>
           </tr>
           <% }); %>
