@@ -107,8 +107,6 @@ const myCourses = async (req, res) => {
   }
 };
 
-module.exports = myCourses;
-
 module.exports = {
   Dashboard,
   Admin,
